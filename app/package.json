@@ -9,6 +9,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@aws-amplify/auth": "^3.4.15",
     "@aws-amplify/cli": "^4.39.0",
     "@babel/core": "~7.9.0",
     "@babel/polyfill": "^7.12.1",

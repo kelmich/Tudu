@@ -4,9 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native';
 
 
-import Amplify from '@aws-amplify/core';
-import config from './aws-exports';
-Amplify.configure(config)
+import Amplify from 'aws-amplify';
+import awsmobile from './aws-exports';
+Amplify.configure({...awsmobile, Analytics: { disabled: true }}); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 class App extends React.Component {
   render() {
@@ -19,8 +19,6 @@ class App extends React.Component {
   }
 }
 
-export default withAuthenticator(App, { includeGreetings: true })
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -29,3 +27,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default withAuthenticator(App, { includeGreetings: true })

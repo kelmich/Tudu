@@ -65,7 +65,7 @@
     "@aws-amplify/api-graphql" "1.2.15"
     "@aws-amplify/api-rest" "1.2.15"
 
-"@aws-amplify/auth@3.4.15":
+"@aws-amplify/auth@3.4.15", "@aws-amplify/auth@^3.4.15":
   version "3.4.15"
   resolved "https://registry.yarnpkg.com/@aws-amplify/auth/-/auth-3.4.15.tgz#6cffaf39049b8954c745f15665fa889e5fe17f22"
   integrity sha512-PECq/N5vBo8ZwoXGcq6BTe75IOe5QfmTUCTZEr8sDJ5lY7pBZmNZmnI46/cNUPUs7frzh6MqN2xE1nmoTpJdvQ==
