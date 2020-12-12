@@ -11,7 +11,7 @@ class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Welcome to Tudu!</Text>
+        <Text>Welcome to Tudu :)</Text>
       </View>
     );
   }
