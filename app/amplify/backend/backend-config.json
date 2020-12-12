@@ -1,17 +1,11 @@
 {
   "auth": {
-    "tudubdbdbefa": {
+    "tudu09e7b5ee": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
     }
   },
-  "hosting": {
-    "amplifyhosting": {
-      "service": "amplifyhosting",
-      "type": "cicd",
-      "lastPushTimeStamp": "2020-12-12T10:08:35.393Z"
-    }
-  }
+  "hosting": {}
 }
