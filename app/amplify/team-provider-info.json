@@ -1,20 +1,26 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-tudu-dev-113251-authRole",
-      "UnauthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-dev-113251-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-dev-113251-authRole",
-      "Region": "eu-central-1",
-      "DeploymentBucketName": "amplify-tudu-dev-113251-deployment",
-      "UnauthRoleName": "amplify-tudu-dev-113251-unauthRole",
-      "StackName": "amplify-tudu-dev-113251",
-      "StackId": "arn:aws:cloudformation:eu-central-1:235468699769:stack/amplify-tudu-dev-113251/649d0e70-3c65-11eb-a3ab-0a7e60142948",
-      "AmplifyAppId": "d1ks6m4kmm7cbs"
-    },
-    "categories": {
-      "auth": {
-        "tudu09e7b5ee": {}
-      }
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-tudu-dev-120705-authRole",
+            "UnauthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-dev-120705-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-dev-120705-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "amplify-tudu-dev-120705-deployment",
+            "UnauthRoleName": "amplify-tudu-dev-120705-unauthRole",
+            "StackName": "amplify-tudu-dev-120705",
+            "StackId": "arn:aws:cloudformation:eu-central-1:235468699769:stack/amplify-tudu-dev-120705/2ca653f0-3c6a-11eb-823c-06a563057a14",
+            "AmplifyAppId": "d1zay1r4srryvh"
+        },
+        "categories": {
+            "auth": {
+                "tudu230f55c2": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d1zay1r4srryvh",
+                    "type": "cicd"
+                }
+            }
+        }
     }
-  }
 }

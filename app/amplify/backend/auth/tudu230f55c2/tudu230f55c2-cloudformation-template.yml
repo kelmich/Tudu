@@ -141,7 +141,7 @@ Resources:
   # Created to allow the UserPool SMS Config to publish via the Simple Notification Service during MFA Process
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, 'tudu09e7b5ee_sns-role', !Join ['',[ 'sns', '09e7b5ee', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, 'tudu230f55c2_sns-role', !Join ['',[ 'sns', '230f55c2', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -153,10 +153,10 @@ Resources:
               - "sts:AssumeRole"
             Condition: 
               StringEquals:
-                sts:ExternalId: tudu09e7b5ee_role_external_id
+                sts:ExternalId: tudu230f55c2_role_external_id
       Policies: 
         - 
-          PolicyName: tudu09e7b5ee-sns-policy
+          PolicyName: tudu230f55c2-sns-policy
           PolicyDocument: 
             Version: "2012-10-17"
             Statement: 
@@ -204,7 +204,7 @@ Resources:
       SmsVerificationMessage: !Ref smsVerificationMessage
       SmsConfiguration: 
         SnsCallerArn: !GetAtt SNSRole.Arn
-        ExternalId: tudu09e7b5ee_role_external_id
+        ExternalId: tudu230f55c2_role_external_id
     
   
   UserPoolClientWeb:
@@ -212,7 +212,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: tudu09e7b5ee_app_clientWeb
+      ClientName: tudu230f55c2_app_clientWeb
       
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
@@ -222,7 +222,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: tudu09e7b5ee_app_client
+      ClientName: tudu230f55c2_app_client
       
       GenerateSecret: !Ref userpoolClientGenerateSecret
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
@@ -233,7 +233,7 @@ Resources:
   # Created to execute Lambda which gets userpool app client config values
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', '09e7b5ee', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', '230f55c2', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -287,7 +287,7 @@ Resources:
   # Marked as depending on UserPoolClientRole for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: tudu09e7b5ee_userpoolclient_lambda_iam_policy
+      PolicyName: tudu230f55c2_userpoolclient_lambda_iam_policy
       Roles: 
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -304,7 +304,7 @@ Resources:
   # Marked as depending on UserPoolClientLambdaPolicy for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: tudu09e7b5ee_userpoolclient_lambda_log_policy
+      PolicyName: tudu230f55c2_userpoolclient_lambda_log_policy
       Roles: 
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -344,7 +344,7 @@ Resources:
   # Always created
     Type: AWS::Cognito::IdentityPool
     Properties: 
-      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'tudu09e7b5ee_identitypool_09e7b5ee', !Join ['',['tudu09e7b5ee_identitypool_09e7b5ee', '__', !Ref env]]]
+      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'tudu230f55c2_identitypool_230f55c2', !Join ['',['tudu230f55c2_identitypool_230f55c2', '__', !Ref env]]]
       
       CognitoIdentityProviders:
         - ClientId:  !Ref UserPoolClient
