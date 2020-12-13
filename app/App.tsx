@@ -1,31 +1,159 @@
-import '@babel/polyfill'; // hacky fix that makes the web verison work
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { withAuthenticator } from 'aws-amplify-react-native';
+import "@babel/polyfill"; // hacky fix that makes the web verison work
+import React, { useEffect } from "react";
+import { StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
+// screens
+import HomeScreen from "./screens/HomeScreen";
+import SplashScreen from "./screens/SplashScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
-import Amplify from 'aws-amplify';
-import awsmobile from './aws-exports';
-Amplify.configure({...awsmobile, Analytics: { disabled: true }}); // Note: Disabling analytics was a hacky way of getting warning to disappear
+// aws
+import Amplify from "aws-amplify";
+import { Auth } from "aws-amplify";
+import awsmobile from "./aws-exports";
+Amplify.configure({ ...awsmobile, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
-class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Yo!</Text>
-      </View>
-    );
-  }
-}
+// fonts
+import { useFonts, Pacifico_400Regular } from "@expo-google-fonts/pacifico";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+// contexts
+import AuthContext from "./contexts/AuthContext";
+
+// Theming
+const theme = {
+  dark: false,
+  colors: {
+    primary: "#17458a",
+    secondary: "#6e94cc",
+    background: "#ffffff",
+    card: "#e0e1dd",
+    text: "#a7a7a7",
+    hintText: "#a8a8a8",
+    inputText: "#5c636e",
+    border: "transparent",
+    notification: "#000000",
   },
-});
+};
 
-export default withAuthenticator(App, { includeGreetings: true })
+// Setup Layout
+const Stack = createStackNavigator();
+
+export default function App() {
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case "RESTORE_TOKEN":
+          return {
+            ...prevState,
+            userToken: action.token,
+            isLoading: false,
+          };
+        case "LOGIN":
+          return {
+            ...prevState,
+            isSignout: false,
+            userToken: action.token,
+          };
+        case "LOGOUT":
+          return {
+            ...prevState,
+            isSignout: true,
+            userToken: null,
+          };
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: false,
+      userToken: null,
+    }
+  );
+
+  // on app start
+  useEffect(() => {
+    const restoreToken = async () => {
+      let userToken;
+      try {
+        userToken = null; //await AsyncStorage.getItem('auth-token');
+      } catch (e) {
+        // Restoring token failed
+        alert(e);
+      }
+      dispatch({ type: "RESTORE_TOKEN", token: userToken });
+    };
+    restoreToken();
+  }, []);
+
+  let [fontsLoaded] = useFonts({
+    Pacifico_400Regular,
+  });
+
+  const authContext = React.useMemo(
+    () => ({
+      login: async (username: string, password: string) => {
+        try {
+          const user = await Auth.signIn(username, password);
+          dispatch({ type: "LOGIN", token: "dummy-auth-token" });
+        } catch (error) {
+          console.log("error signing in", error);
+        }
+      },
+      logout: async () => {
+        try {
+          await Auth.signOut();
+          dispatch({ type: "LOGOUT" });
+        } catch (error) {
+          console.log("error signing out: ", error);
+        }
+      },
+      signUp: async (data) => {
+        dispatch({ type: "LOGIN", token: "dummy-auth-token" });
+      },
+    }),
+    []
+  );
+  
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer theme={theme}>
+        <StatusBar backgroundColor={theme.colors.background} />
+        <Stack.Navigator>
+          {state.isLoading || !fontsLoaded ? (
+            <Stack.Screen name="Splash" component={SplashScreen} />
+          ) : state.userToken == null ? (
+            <>
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  animationTypeForReplace: state.isSignout ? "pop" : "push",
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="Register"
+                component={RegisterScreen}
+                options={{
+                  animationTypeForReplace: state.isSignout ? "pop" : "push",
+                  headerShown: false,
+                }}
+              />
+            </>
+          ) : (
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
+                headerShown: false,
+              }}
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
+  );
+}
