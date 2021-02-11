@@ -13,7 +13,7 @@ const UsernameInput = React.forwardRef((props, reference) => {
         <View style={[styles.container, { backgroundColor: colors.card }]}>
             <TextInput
                 ref={reference}
-                style={[styles.input, { color: colors.inputText }]}
+                style={[styles.input, { color: colors.background }]}
                 selectionColor={colors.hintText}
                 placeholder={"Username"}
                 textAlign={"left"}

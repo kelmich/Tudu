@@ -9,14 +9,13 @@ import { useTheme } from '@react-navigation/native';
 
 
 const PasswordInput = React.forwardRef((props, reference) => {
-    const colors = useTheme().colors;
+    const { colors } = useTheme();
     const [passwordVisible, onTapEye] = React.useState(false);
     return (
         <View style={[styles.container, { backgroundColor: colors.card }]}>
             <TextInput
                 ref={reference}
-                style={[styles.input, { color: colors.inputText }]}
-                selectionColor={colors.hintText}
+                style={[styles.input, { color: colors.background }]}
                 secureTextEntry={!passwordVisible}
                 placeholder={"Password"}
                 textAlign={"left"}
@@ -27,7 +26,7 @@ const PasswordInput = React.forwardRef((props, reference) => {
                 value={props.password}
             />
             <View style={styles.eyeBox}>
-                <Feather onPress={() => onTapEye(!passwordVisible)} name={passwordVisible ? "eye" : "eye-off"} size={25} color={colors.text} />
+                <Feather onPress={() => onTapEye(!passwordVisible)} name={passwordVisible ? "eye" : "eye-off"} size={25} color={colors.hintText} />
             </View>
         </View>
     );

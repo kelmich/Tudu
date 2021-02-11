@@ -1,6 +1,6 @@
 {
   "auth": {
-    "tudu230f55c2": {
+    "tudu": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

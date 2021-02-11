@@ -13,8 +13,8 @@ import AuthContext from "../contexts/AuthContext";
 import { useTheme } from '@react-navigation/native';
 
 function switchKeyboard(
-  username,
-  password,
+  username: string,
+  password: string,
   usernameInputRef,
   passwordInputRef,
   login
@@ -33,7 +33,7 @@ function LoginScreen({ navigation }) {
   const { login } = useContext(AuthContext);
 
   // theme
-  const colors = useTheme().colors;
+  const { colors } = useTheme();
 
   // State variables
   const usernameInputRef = createRef();
@@ -43,7 +43,7 @@ function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* <Logo size={80} /> */}
-      <Text style={{ fontSize: 70, fontFamily: "Pacifico_400Regular",  color: colors.text }}>Tudu</Text>
+      <Text style={{ fontSize: 70, fontFamily: "Pacifico_400Regular",  color: "#ffffff" }}>Tudu</Text>
       <UsernameInput
         ref={usernameInputRef}
         onChangeUsername={onChangeUsername}
@@ -82,7 +82,7 @@ function LoginScreen({ navigation }) {
         <RoundButton
           onPress={() => navigation.push("Register")}
           title={"Register"}
-          color={colors.secondary}
+          color={colors.primary}
         />
         <RoundButton
           onPress={() => login(username, password)}

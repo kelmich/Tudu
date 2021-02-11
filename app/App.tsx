@@ -24,16 +24,14 @@ import AuthContext from "./contexts/AuthContext";
 
 // Theming
 const theme = {
-  dark: false,
+  dark: true,
   colors: {
-    primary: "#17458a",
-    secondary: "#6e94cc",
-    background: "#ffffff",
+    primary: "#1f253d",
+    background: "#323d63",
     card: "#e0e1dd",
-    text: "#a7a7a7",
-    hintText: "#a8a8a8",
-    inputText: "#5c636e",
-    border: "transparent",
+    text: "#cfcfcf",
+    hintText: "#8a8a8a",
+    border: "#adadad",
     notification: "#000000",
   },
 };
@@ -138,7 +136,15 @@ export default function App() {
                 component={RegisterScreen}
                 options={{
                   animationTypeForReplace: state.isSignout ? "pop" : "push",
-                  headerShown: false,
+                  title: "",
+                  headerShown: true,
+                  headerTintColor: theme.colors.text,
+                  headerStyle: {
+                    backgroundColor: theme.colors.background,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                  }
                 }}
               />
             </>
