@@ -13,7 +13,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 // aws
 import Amplify from "aws-amplify";
 import { Auth } from "aws-amplify";
-import awsmobile from "./aws-exports";
+import awsmobile from "./amplify/team-provider-info.json";
 Amplify.configure({ ...awsmobile, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
