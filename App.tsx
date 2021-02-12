@@ -78,7 +78,7 @@ export default function App() {
         userToken = null; //await AsyncStorage.getItem('auth-token');
       } catch (e) {
         // Restoring token failed
-        alert("Oh No!" + e);
+        alert(e);
       }
       dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
