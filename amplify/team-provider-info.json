@@ -1,26 +1,23 @@
 {
-  "master": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-tudu-master-84354-authRole",
-      "UnauthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-master-84354-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-master-84354-authRole",
-      "Region": "eu-central-1",
-      "DeploymentBucketName": "amplify-tudu-master-84354-deployment",
-      "UnauthRoleName": "amplify-tudu-master-84354-unauthRole",
-      "StackName": "amplify-tudu-master-84354",
-      "StackId": "arn:aws:cloudformation:eu-central-1:235468699769:stack/amplify-tudu-master-84354/70f387b0-6d0e-11eb-a47d-025fdeabb094",
-      "AmplifyAppId": "d1zay1r4srryvh"
-    },
-    "categories": {
-      "auth": {
-        "tudu": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1zay1r4srryvh",
-          "type": "cicd"
+    "master": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-tudu-master-111447-authRole",
+            "UnauthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-master-111447-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::235468699769:role/amplify-tudu-master-111447-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "amplify-tudu-master-111447-deployment",
+            "UnauthRoleName": "amplify-tudu-master-111447-unauthRole",
+            "StackName": "amplify-tudu-master-111447",
+            "StackId": "arn:aws:cloudformation:eu-central-1:235468699769:stack/amplify-tudu-master-111447/23fd9ce0-6d1b-11eb-bce1-0a32025e35d4",
+            "AmplifyAppId": "d28tgzzsywmg72"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d28tgzzsywmg72",
+                    "type": "cicd"
+                }
+            }
         }
-      }
     }
-  }
 }
