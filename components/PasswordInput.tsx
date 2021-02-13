@@ -7,21 +7,24 @@ import { View, TextInput, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 
+interface propType {
+    onChangePassword: Function;
+    password: string;
+}
 
-const PasswordInput = React.forwardRef((props, reference) => {
+
+const PasswordInput = React.forwardRef((props: propType) => {
     const { colors } = useTheme();
     const [passwordVisible, onTapEye] = React.useState(false);
     return (
         <View style={[styles.container, { backgroundColor: colors.card }]}>
             <TextInput
-                ref={reference}
                 style={[styles.input, { color: colors.background }]}
                 secureTextEntry={!passwordVisible}
                 placeholder={"Password"}
                 textAlign={"left"}
                 placeholderTextColor={colors.hintText}
                 onChangeText={text => props.onChangePassword(text)}
-                onSubmitEditing={() => props.onSubmitEditing()}
                 returnKeyType={"go"}
                 value={props.password}
             />
@@ -46,7 +49,9 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 18,
         width: 260,
-        paddingLeft: 20
+        height: 70,
+        paddingLeft: 20,
+        outline: "none",
     },
     eyeBox: {
         width: 70,
