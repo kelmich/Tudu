@@ -101,8 +101,8 @@ export default function App() {
           alert("Error signing in: " + error.message);
         }
       },
-      loginWithGoogle: () => {
-        Auth.federatedSignIn();
+      loginWithGoogle: async () => {
+        await Auth.federatedSignIn();
         dispatch({ type: "LOGIN" });
       },
       logout: async () => {
