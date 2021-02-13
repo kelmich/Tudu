@@ -7,24 +7,23 @@ import { View, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 interface propType {
-    onChangeUsername: Function;
-    username: string;
+    onChangeEmail: Function;
+    email: string;
 }
 
 
-const UsernameInput = React.forwardRef((props: propType) => {
-    const colors = useTheme().colors;
+const EmailInput = React.forwardRef((props: propType) => {
+    const { colors } = useTheme();
     return (
         <View style={[styles.container, { backgroundColor: colors.card }]}>
             <TextInput
                 style={[styles.input, { color: colors.background }]}
                 selectionColor={colors.hintText}
-                placeholder={"Username"}
-                textAlign={"left"}
+                placeholder={"Email"}
                 placeholderTextColor={colors.hintText}
-                onChangeText={text => props.onChangeUsername(text)}
+                onChangeText={text => props.onChangeEmail(text)}
                 returnKeyType={"go"}
-                value={props.username}
+                value={props.email}
             />
         </View>
     );
@@ -50,4 +49,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default UsernameInput;
+export default EmailInput;

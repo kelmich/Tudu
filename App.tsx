@@ -9,10 +9,11 @@ import HomeScreen from "./screens/HomeScreen";
 import SplashScreen from "./screens/SplashScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import ConfirmCodeScreen from "./screens/ConfirmCodeScreen";
 
 // aws
 import Amplify, { Auth } from "aws-amplify";
-import awsmobile from "./src/aws-exports";
+import awsmobile from "./aws-exports";
 Amplify.configure({ ...awsmobile, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
@@ -46,23 +47,27 @@ export default function App() {
           return {
             ...prevState,
             isLoading: false,
+            isLoggedIn: true,
           };
         case "LOGIN":
           return {
             ...prevState,
             isSignout: false,
+            isLoggedIn: true,
           };
         case "LOGOUT":
           return {
             ...prevState,
+            isLoading: false,
             isSignout: true,
+            isLoggedIn: false,
           };
       }
     },
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      isLoggedIn: false,
     }
   );
 
@@ -72,11 +77,12 @@ export default function App() {
       let user;
       try {
         user = await Auth.currentAuthenticatedUser();
+        dispatch({ type: "RESTORE_TOKEN" });
       } catch (e) {
         // Restoring token failed
         console.log("Error retrieving token: "+ e);
+        dispatch({ type: "LOGOUT" });
       }
-      dispatch({ type: "RESTORE_TOKEN" });
     };
     restoreToken();
   }, []);
@@ -87,39 +93,45 @@ export default function App() {
 
   const authContext = React.useMemo(
     () => ({
-      login: async (username: string, password: string) => {
+      login: async (email: string, password: string) => {
         try {
-          const user = await Auth.signIn(username, password);
+          await Auth.signIn(email, password);
           dispatch({ type: "LOGIN" });
         } catch (error) {
-          alert("Error signing in: " + error);
+          alert("Error signing in: " + error.message);
         }
       },
       loginWithGoogle: () => {
         Auth.federatedSignIn();
+        dispatch({ type: "LOGIN" });
       },
       logout: async () => {
         try {
           await Auth.signOut();
           dispatch({ type: "LOGOUT" });
         } catch (error) {
-          alert("Error signing out: " + error);
+          alert("Error signing out: " + error.message);
         }
       },
-      register: async (username: string, email: string, password: string) => {
+      register: async (email: string, password: string) => {
+        let username = email;
         try {
-          const { user } = await Auth.signUp({
+          await Auth.signUp({
               username,
               password,
-              attributes: {
-                email
-            }
           });
-          dispatch({ type: "LOGIN" });
           } catch (error) {
-            alert("Error signing up:" + error);
+            alert("Error signing up:" + error.message);
           }
       },
+      confirmRegister: async (email: string, code: string) => {
+        try {
+          await Auth.confirmSignUp(email, code);
+          dispatch({ type: "LOGIN" });
+        } catch (error) {
+            console.log('error confirming sign up', error);
+        }
+      }
     }),
     []
   );
@@ -130,8 +142,8 @@ export default function App() {
         <StatusBar backgroundColor={theme.colors.background} />
         <Stack.Navigator>
           {state.isLoading || !fontsLoaded ? (
-            <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : state.userToken == null ? (
+            <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+          ) : state.isLoggedIn == false ? (
             <>
               <Stack.Screen
                 name="Login"
@@ -144,6 +156,22 @@ export default function App() {
               <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
+                options={{
+                  animationTypeForReplace: state.isSignout ? "pop" : "push",
+                  title: "",
+                  headerShown: true,
+                  headerTintColor: theme.colors.text,
+                  headerStyle: {
+                    backgroundColor: theme.colors.background,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                  }
+                }}
+              />
+              <Stack.Screen
+                name="ConfirmCodeScreen"
+                component={ConfirmCodeScreen}
                 options={{
                   animationTypeForReplace: state.isSignout ? "pop" : "push",
                   title: "",

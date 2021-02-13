@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Elements
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
 
 // styling
 import { useTheme } from '@react-navigation/native';
@@ -10,12 +10,12 @@ function EmailInput(props) {
     const  { colors } = useTheme();
     return (
         <View style={styles.container}>
-            <Pressable
+            <TouchableHighlight
                 style={[styles.button, { backgroundColor: props.color }]}
                 onPress={props.onPress}
             >
                 <View><Text style={[styles.buttonText, { color: colors.text }]}>{props.title}</Text></View>
-            </Pressable>
+            </TouchableHighlight>
         </View>
     );
 }

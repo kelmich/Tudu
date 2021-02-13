@@ -1,17 +1,16 @@
-import React, { useState, createRef, useContext } from "react";
+import React, { useState, useContext } from "react";
 
 // Elements
-import { View, StyleSheet, TouchableHighlight, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
+import EmailInput from "../components/EmailInput";
 import PasswordInput from "../components/PasswordInput";
-import UsernameInput from "../components/UsernameInput";
 import RoundButton from "../components/RoundButton";
 // import Logo from '../components/Logo';
 
 import AuthContext from "../contexts/AuthContext";
 
 // styling
-import { useTheme } from '@react-navigation/native';
-
+import { useTheme } from "@react-navigation/native";
 
 function LoginScreen({ navigation }) {
   // Import login function from app.js
@@ -21,20 +20,22 @@ function LoginScreen({ navigation }) {
   const { colors } = useTheme();
 
   // State variables
-  const [username, onChangeUsername] = useState("");
+  const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   return (
     <View style={styles.container}>
       {/* <Logo size={80} /> */}
-      <Text style={{ fontSize: 70, fontFamily: "Pacifico_400Regular",  color: "#ffffff" }}>Tudu</Text>
-      <UsernameInput
-        onChangeUsername={onChangeUsername}
-        username={username}
-      />
-      <PasswordInput
-        onChangePassword={onChangePassword}
-        password={password}
-      />
+      <Text
+        style={{
+          fontSize: 70,
+          fontFamily: "Pacifico_400Regular",
+          color: "#ffffff",
+        }}
+      >
+        Tudu
+      </Text>
+      <EmailInput onChangeEmail={onChangeEmail} email={email} />
+      <PasswordInput onChangePassword={onChangePassword} password={password} />
       <View
         style={{
           width: 350,
@@ -48,7 +49,7 @@ function LoginScreen({ navigation }) {
           color={colors.primary}
         />
         <RoundButton
-          onPress={() => login(username, password)}
+          onPress={() => login(email, password)}
           title={"Login"}
           color={colors.primary}
         />

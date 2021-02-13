@@ -22,7 +22,6 @@ const PasswordInput = React.forwardRef((props: propType) => {
                 style={[styles.input, { color: colors.background }]}
                 secureTextEntry={!passwordVisible}
                 placeholder={"Password"}
-                textAlign={"left"}
                 placeholderTextColor={colors.hintText}
                 onChangeText={text => props.onChangePassword(text)}
                 returnKeyType={"go"}
