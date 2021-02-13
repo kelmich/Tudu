@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     width: 350,
     padding: 20,
     height: 70,
-    outline: "none",
   },
 });
 

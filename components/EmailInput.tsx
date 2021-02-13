@@ -12,7 +12,7 @@ interface propType {
 }
 
 
-const EmailInput = React.forwardRef((props: propType) => {
+const EmailInput = React.forwardRef((props: propType, ref) => {
     const { colors } = useTheme();
     return (
         <View style={[styles.container, { backgroundColor: colors.card }]}>
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
         width: 350,
         padding: 20,
         height: 70,
-        outline: "none",
     }
 });
 

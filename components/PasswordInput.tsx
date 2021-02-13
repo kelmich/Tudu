@@ -13,7 +13,7 @@ interface propType {
 }
 
 
-const PasswordInput = React.forwardRef((props: propType) => {
+const PasswordInput = React.forwardRef((props: propType, ref) => {
     const { colors } = useTheme();
     const [passwordVisible, onTapEye] = React.useState(false);
     return (
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
         width: 260,
         height: 70,
         paddingLeft: 20,
-        outline: "none",
     },
     eyeBox: {
         width: 70,
