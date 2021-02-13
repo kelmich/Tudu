@@ -12,32 +12,15 @@ import AuthContext from "../contexts/AuthContext";
 // styling
 import { useTheme } from '@react-navigation/native';
 
-function switchKeyboard(
-  username: string,
-  password: string,
-  usernameInputRef,
-  passwordInputRef,
-  login
-) {
-  if (username == "") {
-    usernameInputRef.current.focus();
-  } else if (password == "") {
-    passwordInputRef.current.focus();
-  } else {
-    login(username, password);
-  }
-}
 
 function LoginScreen({ navigation }) {
   // Import login function from app.js
-  const { login } = useContext(AuthContext);
+  const { login, loginWithGoogle } = useContext(AuthContext);
 
   // theme
   const { colors } = useTheme();
 
   // State variables
-  const usernameInputRef = createRef();
-  const passwordInputRef = createRef();
   const [username, onChangeUsername] = useState("");
   const [password, onChangePassword] = useState("");
   return (
@@ -45,31 +28,11 @@ function LoginScreen({ navigation }) {
       {/* <Logo size={80} /> */}
       <Text style={{ fontSize: 70, fontFamily: "Pacifico_400Regular",  color: "#ffffff" }}>Tudu</Text>
       <UsernameInput
-        ref={usernameInputRef}
         onChangeUsername={onChangeUsername}
-        onSubmitEditing={() =>
-          switchKeyboard(
-            username,
-            password,
-            usernameInputRef,
-            passwordInputRef,
-            login
-          )
-        }
         username={username}
       />
       <PasswordInput
-        ref={passwordInputRef}
         onChangePassword={onChangePassword}
-        onSubmitEditing={() =>
-          switchKeyboard(
-            username,
-            password,
-            usernameInputRef,
-            passwordInputRef,
-            login
-          )
-        }
         password={password}
       />
       <View
@@ -89,6 +52,7 @@ function LoginScreen({ navigation }) {
           title={"Login"}
           color={colors.primary}
         />
+        {/* <button onClick={() => loginWithGoogle()}>Open Google</button> */}
       </View>
     </View>
   );

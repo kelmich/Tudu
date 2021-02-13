@@ -11,9 +11,8 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 
 // aws
-import Amplify from "aws-amplify";
-import { Auth } from "aws-amplify";
-import * as awsmobile from "./amplify/backend/backend-config.json";
+import Amplify, { Auth } from "aws-amplify";
+import awsmobile from "./src/aws-exports";
 Amplify.configure({ ...awsmobile, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
@@ -46,20 +45,17 @@ export default function App() {
         case "RESTORE_TOKEN":
           return {
             ...prevState,
-            userToken: action.token,
             isLoading: false,
           };
         case "LOGIN":
           return {
             ...prevState,
             isSignout: false,
-            userToken: action.token,
           };
         case "LOGOUT":
           return {
             ...prevState,
             isSignout: true,
-            userToken: null,
           };
       }
     },
@@ -73,14 +69,14 @@ export default function App() {
   // on app start
   useEffect(() => {
     const restoreToken = async () => {
-      let userToken;
+      let user;
       try {
-        userToken = null; //await AsyncStorage.getItem('auth-token');
+        user = await Auth.currentAuthenticatedUser();
       } catch (e) {
         // Restoring token failed
-        alert("Error retrieving token:  "+ e);
+        console.log("Error retrieving token: "+ e);
       }
-      dispatch({ type: "RESTORE_TOKEN", token: userToken });
+      dispatch({ type: "RESTORE_TOKEN" });
     };
     restoreToken();
   }, []);
@@ -94,21 +90,35 @@ export default function App() {
       login: async (username: string, password: string) => {
         try {
           const user = await Auth.signIn(username, password);
-          dispatch({ type: "LOGIN", token: "dummy-auth-token" });
+          dispatch({ type: "LOGIN" });
         } catch (error) {
-          console.log("error signing in", error);
+          alert("Error signing in: " + error);
         }
+      },
+      loginWithGoogle: () => {
+        Auth.federatedSignIn();
       },
       logout: async () => {
         try {
           await Auth.signOut();
           dispatch({ type: "LOGOUT" });
         } catch (error) {
-          console.log("error signing out: ", error);
+          alert("Error signing out: " + error);
         }
       },
-      signUp: async (data) => {
-        dispatch({ type: "LOGIN", token: "dummy-auth-token" });
+      register: async (username: string, email: string, password: string) => {
+        try {
+          const { user } = await Auth.signUp({
+              username,
+              password,
+              attributes: {
+                email
+            }
+          });
+          dispatch({ type: "LOGIN" });
+          } catch (error) {
+            alert("Error signing up:" + error);
+          }
       },
     }),
     []
