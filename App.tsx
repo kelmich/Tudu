@@ -1,8 +1,9 @@
 import "@babel/polyfill"; // hacky fix that makes the web verison work
-import React, { useEffect } from "react";
-import { StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Linking, Platform, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import * as WebBrowser from 'expo-web-browser';
 
 // screens
 import HomeScreen from "./screens/HomeScreen";
@@ -12,13 +13,13 @@ import RegisterScreen from "./screens/RegisterScreen";
 import ConfirmCodeScreen from "./screens/ConfirmCodeScreen";
 
 // aws
-import Amplify, { Auth } from "aws-amplify";
+import Amplify, { Auth, Hub } from "aws-amplify";
 import awsmobile from "./aws-exports";
 
 // another hacky amplify fix :/ (https://github.com/aws-amplify/amplify-js/issues/5127)
 let configUpdate = awsmobile;
-configUpdate.oauth.redirectSignIn = window.location.href;
-configUpdate.oauth.redirectSignOut = window.location.href;
+configUpdate.oauth.redirectSignIn = `${window.location.origin}/`;
+configUpdate.oauth.redirectSignOut = `${window.location.origin}/`;
 Amplify.configure({ ...configUpdate, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
@@ -45,51 +46,32 @@ const theme = {
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case "RESTORE_TOKEN":
-          return {
-            ...prevState,
-            isLoading: false,
-            isLoggedIn: true,
-          };
-        case "LOGIN":
-          return {
-            ...prevState,
-            isSignout: false,
-            isLoggedIn: true,
-          };
-        case "LOGOUT":
-          return {
-            ...prevState,
-            isLoading: false,
-            isSignout: true,
-            isLoggedIn: false,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      isLoggedIn: false,
-    }
-  );
+  const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [isSignout, setIsSignout] = useState(false);
 
   // on app start
-  const restoreToken = async () => {
-    let user;
+  const getUser = async () =>  {
     try {
-      user = await Auth.currentAuthenticatedUser();
-      dispatch({ type: "RESTORE_TOKEN" });
-    } catch (e) {
-      // Restoring token failed
-      console.log("Error retrieving token: "+ e);
-      dispatch({ type: "LOGOUT" });
+      setUser(await Auth.currentAuthenticatedUser());
+    } catch(error) {
+      console.log('Not signed in: ' + error)
     }
-  };
+    setLoading(false);
+  }
+
   useEffect(() => {
-    restoreToken();
+    Hub.listen("auth", async ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          await getUser();
+          break;
+        case "signOut":
+          setUser(null);
+          break;
+      }
+    });
+    getUser();
   }, []);
 
   let [fontsLoaded] = useFonts({
@@ -101,19 +83,19 @@ export default function App() {
       login: async (email: string, password: string) => {
         try {
           await Auth.signIn(email, password);
-          dispatch({ type: "LOGIN" });
+          setIsSignout(false);
         } catch (error) {
           alert("Error signing in: " + error.message);
         }
       },
       loginWithGoogle: async () => {
-        let user = await Auth.federatedSignIn();
-        console.log(user);
+        await Auth.federatedSignIn({ provider: "Google" });
+        setIsSignout(false);
       },
       logout: async () => {
         try {
           await Auth.signOut();
-          dispatch({ type: "LOGOUT" });
+          setIsSignout(true);
         } catch (error) {
           alert("Error signing out: " + error.message);
         }
@@ -132,7 +114,6 @@ export default function App() {
       confirmRegister: async (email: string, code: string) => {
         try {
           await Auth.confirmSignUp(email, code);
-          dispatch({ type: "LOGIN" });
         } catch (error) {
             console.log('error confirming sign up', error);
         }
@@ -146,15 +127,15 @@ export default function App() {
       <NavigationContainer theme={theme}>
         <StatusBar backgroundColor={theme.colors.background} />
         <Stack.Navigator>
-          {state.isLoading || !fontsLoaded ? (
+          {loading || !fontsLoaded ? (
             <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-          ) : state.isLoggedIn == false ? (
+          ) : !user ? (
             <>
               <Stack.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{
-                  animationTypeForReplace: state.isSignout ? "pop" : "push",
+                  animationTypeForReplace: isSignout ? "pop" : "push",
                   headerShown: false,
                 }}
               />
@@ -162,7 +143,7 @@ export default function App() {
                 name="Register"
                 component={RegisterScreen}
                 options={{
-                  animationTypeForReplace: state.isSignout ? "pop" : "push",
+                  animationTypeForReplace: isSignout ? "pop" : "push",
                   title: "",
                   headerShown: true,
                   headerTintColor: theme.colors.text,
@@ -178,7 +159,7 @@ export default function App() {
                 name="ConfirmCodeScreen"
                 component={ConfirmCodeScreen}
                 options={{
-                  animationTypeForReplace: state.isSignout ? "pop" : "push",
+                  animationTypeForReplace: isSignout ? "pop" : "push",
                   title: "",
                   headerShown: true,
                   headerTintColor: theme.colors.text,
@@ -196,7 +177,7 @@ export default function App() {
               name="Home"
               component={HomeScreen}
               options={{
-                animationTypeForReplace: state.isSignout ? "pop" : "push",
+                animationTypeForReplace: isSignout ? "pop" : "push",
                 headerShown: false,
               }}
             />

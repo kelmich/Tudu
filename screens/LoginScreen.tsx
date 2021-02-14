@@ -12,6 +12,9 @@ import AuthContext from "../contexts/AuthContext";
 // styling
 import { useTheme } from "@react-navigation/native";
 
+
+import Amplify, { Auth, Hub } from "aws-amplify";
+
 function LoginScreen({ navigation }) {
   // Import login function from app.js
   const { login, loginWithGoogle } = useContext(AuthContext);
@@ -53,13 +56,13 @@ function LoginScreen({ navigation }) {
           title={"Login"}
           color={colors.primary}
         />
-        {/* <RoundButton
-          onPress={() => loginWithGoogle()}
-          title={"Google Login"}
-          color={colors.primary}
-        /> */}
-        {/* <button onClick={() => loginWithGoogle()}>Open Google</button> */}
       </View>
+      <Text style={{ color: colors.text, paddingTop: 20 }}>Or Login With</Text>
+      <RoundButton
+          onPress={() => loginWithGoogle()}
+          icon={"logo-google"}
+          color={colors.primary}
+        />
     </View>
   );
 }
