@@ -53,11 +53,11 @@ function LoginScreen({ navigation }) {
           title={"Login"}
           color={colors.primary}
         />
-        <RoundButton
+        {/* <RoundButton
           onPress={() => loginWithGoogle()}
           title={"Google Login"}
           color={colors.primary}
-        />
+        /> */}
         {/* <button onClick={() => loginWithGoogle()}>Open Google</button> */}
       </View>
     </View>

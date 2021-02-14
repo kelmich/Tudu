@@ -137,10 +137,6 @@ Parameters:
     Type: String
   
             
-  hostedUIProviderCreds:
-    Type: String
-  
-            
   oAuthMetadata:
     Type: String
   
@@ -149,7 +145,6 @@ Parameters:
   userPoolGroupList:
     Type: CommaDelimitedList
       
-            
   serviceName:
     Type: String
   
@@ -168,6 +163,27 @@ Parameters:
       
         
   dependsOn:
+    Type: CommaDelimitedList
+      
+  hostedUIProviderCreds:
+    Type: String
+  
+            
+  
+  userPoolGroups:
+    Type: String
+            
+  
+  adminQueries:
+    Type: String
+            
+            
+  
+  thirdPartyAuth:
+    Type: String
+            
+        
+  authProviders:
     Type: CommaDelimitedList
       
 Conditions:

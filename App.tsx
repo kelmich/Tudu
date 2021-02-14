@@ -14,7 +14,12 @@ import ConfirmCodeScreen from "./screens/ConfirmCodeScreen";
 // aws
 import Amplify, { Auth } from "aws-amplify";
 import awsmobile from "./aws-exports";
-Amplify.configure({ ...awsmobile, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
+
+// another hacky amplify fix :/ (https://github.com/aws-amplify/amplify-js/issues/5127)
+let configUpdate = awsmobile;
+configUpdate.oauth.redirectSignIn = window.location.href;
+configUpdate.oauth.redirectSignOut = window.location.href;
+Amplify.configure({ ...configUpdate, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
 import { useFonts, Pacifico_400Regular } from "@expo-google-fonts/pacifico";
@@ -72,18 +77,18 @@ export default function App() {
   );
 
   // on app start
+  const restoreToken = async () => {
+    let user;
+    try {
+      user = await Auth.currentAuthenticatedUser();
+      dispatch({ type: "RESTORE_TOKEN" });
+    } catch (e) {
+      // Restoring token failed
+      console.log("Error retrieving token: "+ e);
+      dispatch({ type: "LOGOUT" });
+    }
+  };
   useEffect(() => {
-    const restoreToken = async () => {
-      let user;
-      try {
-        user = await Auth.currentAuthenticatedUser();
-        dispatch({ type: "RESTORE_TOKEN" });
-      } catch (e) {
-        // Restoring token failed
-        console.log("Error retrieving token: "+ e);
-        dispatch({ type: "LOGOUT" });
-      }
-    };
     restoreToken();
   }, []);
 
@@ -102,8 +107,8 @@ export default function App() {
         }
       },
       loginWithGoogle: async () => {
-        await Auth.federatedSignIn();
-        dispatch({ type: "LOGIN" });
+        let user = await Auth.federatedSignIn();
+        console.log(user);
       },
       logout: async () => {
         try {
