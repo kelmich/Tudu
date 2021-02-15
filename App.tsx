@@ -2,11 +2,15 @@ import "@babel/polyfill"; // hacky fix that makes the web verison work
 import React, { useEffect, useState } from "react";
 import { Platform, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Feather } from "@expo/vector-icons";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
-
+// login popup for sso
+import * as Linking from "expo-linking";
+import urlOpener from "./components/UrlOpener";
 
 // screens
 import HomeScreen from "./screens/HomeScreen";
@@ -22,21 +26,13 @@ import Amplify, { Auth, Hub } from "aws-amplify";
 import awsmobile from "./aws-exports";
 
 // another hacky amplify fix :/ (https://github.com/aws-amplify/amplify-js/issues/5127)
-async function urlOpener(url, redirectUrl) {
-  const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
-      url,
-      redirectUrl
-  );
-
-  if (type === 'success') {
-      WebBrowser.dismissBrowser();
-      return Linking.openURL(newUrl);
-  }
-}
 let configUpdate = awsmobile;
-configUpdate.oauth.redirectSignIn = `${ Linking.makeUrl() }/`;
-configUpdate.oauth.redirectSignOut = `${ Linking.makeUrl() }/`;
-configUpdate.oauth = Platform.OS != "web" ? { ...configUpdate.oauth, urlOpener } : configUpdate.oauth;
+configUpdate.oauth.redirectSignIn = `${Linking.makeUrl()}/`;
+configUpdate.oauth.redirectSignOut = `${Linking.makeUrl()}/`;
+configUpdate.oauth =
+  Platform.OS != "web"
+    ? { ...configUpdate.oauth, urlOpener }
+    : configUpdate.oauth;
 Amplify.configure({ ...configUpdate, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
@@ -61,6 +57,7 @@ const theme = {
 
 // Setup Layout
 const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState("");
@@ -68,14 +65,14 @@ export default function App() {
   const [isSignout, setIsSignout] = useState(false);
 
   // on app start
-  const getUser = async () =>  {
+  const getUser = async () => {
     try {
       setUser(await Auth.currentAuthenticatedUser());
-    } catch(error) {
-      console.log('Not signed in: ' + error)
+    } catch (error) {
+      console.log("Not signed in: " + error);
     }
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     Hub.listen("auth", async ({ payload: { event, data } }) => {
@@ -121,20 +118,20 @@ export default function App() {
         let username = email;
         try {
           await Auth.signUp({
-              username,
-              password,
+            username,
+            password,
           });
-          } catch (error) {
-            alert("Error signing up:" + error.message);
-          }
+        } catch (error) {
+          alert("Error signing up:" + error.message);
+        }
       },
       confirmRegister: async (email: string, code: string) => {
         try {
           await Auth.confirmSignUp(email, code);
         } catch (error) {
-            console.log('error confirming sign up', error);
+          console.log("error confirming sign up", error);
         }
-      }
+      },
     }),
     []
   );
@@ -153,54 +150,82 @@ export default function App() {
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0,
-    }
+    },
   };
-  
+
+  const main = () => (
+    <Stack.Navigator>
+      {loading || !fontsLoaded ? (
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+      ) : !user ? (
+        <>
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={basicScreenOptions}
+          />
+          <Stack.Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={regularScreenOptions}
+          />
+          <Stack.Screen
+            name="ConfirmCodeScreen"
+            component={ConfirmCodeScreen}
+            options={regularScreenOptions}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={basicScreenOptions}
+          />
+          <Stack.Screen
+            name="UserScreen"
+            component={UserScreen}
+            options={regularScreenOptions}
+          />
+        </>
+      )}
+    </Stack.Navigator>
+  );
+
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer theme={theme}>
         <StatusBar backgroundColor={theme.colors.background} />
-        <Stack.Navigator>
-          {loading || !fontsLoaded ? (
-            <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-          ) : !user ? (
-            <>
-              <Stack.Screen
-                name="LoginScreen"
-                component={LoginScreen}
-                options={basicScreenOptions}
-              />
-              <Stack.Screen
-                name="RegisterScreen"
-                component={RegisterScreen}
-                options={regularScreenOptions}
-              />
-              <Stack.Screen
-                name="ConfirmCodeScreen"
-                component={ConfirmCodeScreen}
-                options={regularScreenOptions}
-              />
-            </>
-          ) : (
-            <>
-            <Stack.Screen
-              name="HomeScreen"
-              component={HomeScreen}
-              options={basicScreenOptions}
-            />
-            <Stack.Screen
-              name="UserScreen"
-              component={UserScreen}
-              options={regularScreenOptions}
-            />
-            <Stack.Screen
-              name="NewTaskScreen"
-              component={NewTaskScreen}
-              options={regularScreenOptions}
-            />
-            </>
-          )}
-        </Stack.Navigator>
+        <RootStack.Navigator
+          mode="modal"
+          screenOptions={({ route, navigation }) => ({
+            ...TransitionPresets.ModalPresentationIOS,
+            cardOverlayEnabled: true,
+            gestureEnabled: true,
+            headerStatusBarHeight:
+              navigation
+                .dangerouslyGetState()
+                .routes.findIndex((r: any) => r.key === route.key) > 0
+                ? 0
+                : undefined,
+            headerLeft: () => <Feather onPress={() => navigation.goBack()} name="x" color={theme.colors.text} size={30} style={{ padding: 15 }} />,
+          })}
+        >
+          <RootStack.Screen
+            name="Main"
+            component={main}
+            options={{ headerShown: false }}
+          />
+          <RootStack.Screen
+            name="NewTaskScreen"
+            component={NewTaskScreen}
+            options={regularScreenOptions}
+          />
+        </RootStack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
   );

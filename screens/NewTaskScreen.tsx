@@ -8,6 +8,12 @@ function NewTaskScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>New Tasks Screen</Text>
+      <RoundButton 
+        title="Add Task"
+        color={colors.primary}
+        style={{ position: "absolute", right: 20, bottom: 20 }}
+        onPress={() => navigation.goBack()}
+      />
     </View>
   );
 }
