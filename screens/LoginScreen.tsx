@@ -5,15 +5,12 @@ import { View, StyleSheet, Text } from "react-native";
 import EmailInput from "../components/EmailInput";
 import PasswordInput from "../components/PasswordInput";
 import RoundButton from "../components/RoundButton";
-// import Logo from '../components/Logo';
+import Logo from '../components/Logo';
 
 import AuthContext from "../contexts/AuthContext";
 
 // styling
 import { useTheme } from "@react-navigation/native";
-
-
-import Amplify, { Auth, Hub } from "aws-amplify";
 
 function LoginScreen({ navigation }) {
   // Import login function from app.js
@@ -27,16 +24,7 @@ function LoginScreen({ navigation }) {
   const [password, onChangePassword] = useState("");
   return (
     <View style={styles.container}>
-      {/* <Logo size={80} /> */}
-      <Text
-        style={{
-          fontSize: 70,
-          fontFamily: "Pacifico_400Regular",
-          color: "#ffffff",
-        }}
-      >
-        Tudu
-      </Text>
+      <Logo size={70} />
       <EmailInput onChangeEmail={onChangeEmail} email={email} />
       <PasswordInput onChangePassword={onChangePassword} password={password} />
       <View
@@ -44,10 +32,11 @@ function LoginScreen({ navigation }) {
           width: 350,
           flexDirection: "row",
           justifyContent: "space-evenly",
+          padding: 20
         }}
       >
         <RoundButton
-          onPress={() => navigation.push("Register")}
+          onPress={() => navigation.push("RegisterScreen")}
           title={"Register"}
           color={colors.primary}
         />
@@ -57,11 +46,13 @@ function LoginScreen({ navigation }) {
           color={colors.primary}
         />
       </View>
-      <Text style={{ color: colors.text, paddingTop: 20 }}>Or Login With</Text>
+      <Text style={{ color: colors.text }}>Or Login With</Text>
       <RoundButton
           onPress={() => loginWithGoogle()}
+          ionicons
           icon={"logo-google"}
           color={colors.primary}
+          style={{ paddingTop: 20 }}
         />
     </View>
   );

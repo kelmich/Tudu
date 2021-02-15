@@ -46,6 +46,7 @@ function RegisterScreen({ navigation }) {
         }}
         title={"Continue"}
         color={colors.primary}
+        style={{ paddingTop: 20 }}
       />
     </View>
   );

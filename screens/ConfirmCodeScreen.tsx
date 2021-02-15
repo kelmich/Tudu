@@ -44,9 +44,13 @@ function ConfirmCodeScreen({ route, navigation }) {
         />
       </View>
       <RoundButton
-        onPress={async () => await confirmRegister(route.params.email, code)}
+        onPress={async () => { await 
+          confirmRegister(route.params.email, code);
+          navigation.navigate("LoginScreen");
+        }}
         title={"Complete"}
         color={colors.primary}
+        style={{ paddingTop: 20 }}
       />
     </View>
   );

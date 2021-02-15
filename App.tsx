@@ -1,9 +1,12 @@
 import "@babel/polyfill"; // hacky fix that makes the web verison work
 import React, { useEffect, useState } from "react";
-import { Linking, Platform, StatusBar } from "react-native";
+import { Platform, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+
+import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
+
 
 // screens
 import HomeScreen from "./screens/HomeScreen";
@@ -11,15 +14,29 @@ import SplashScreen from "./screens/SplashScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ConfirmCodeScreen from "./screens/ConfirmCodeScreen";
+import UserScreen from "./screens/UserScreen";
+import NewTaskScreen from "./screens/NewTaskScreen";
 
 // aws
 import Amplify, { Auth, Hub } from "aws-amplify";
 import awsmobile from "./aws-exports";
 
 // another hacky amplify fix :/ (https://github.com/aws-amplify/amplify-js/issues/5127)
+async function urlOpener(url, redirectUrl) {
+  const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
+      url,
+      redirectUrl
+  );
+
+  if (type === 'success') {
+      WebBrowser.dismissBrowser();
+      return Linking.openURL(newUrl);
+  }
+}
 let configUpdate = awsmobile;
-configUpdate.oauth.redirectSignIn = `${window.location.origin}/`;
-configUpdate.oauth.redirectSignOut = `${window.location.origin}/`;
+configUpdate.oauth.redirectSignIn = `${ Linking.makeUrl() }/`;
+configUpdate.oauth.redirectSignOut = `${ Linking.makeUrl() }/`;
+configUpdate.oauth = Platform.OS != "web" ? { ...configUpdate.oauth, urlOpener } : configUpdate.oauth;
 Amplify.configure({ ...configUpdate, Analytics: { disabled: true } }); // Note: Disabling analytics was a hacky way of getting warning to disappear
 
 // fonts
@@ -121,6 +138,23 @@ export default function App() {
     }),
     []
   );
+
+  const basicScreenOptions = {
+    animationTypeForReplace: isSignout ? "pop" : "push",
+    headerShown: false,
+  };
+  const regularScreenOptions = {
+    animationTypeForReplace: isSignout ? "pop" : "push",
+    title: "",
+    headerShown: true,
+    headerTintColor: theme.colors.text,
+    headerStyle: {
+      backgroundColor: theme.colors.background,
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    }
+  };
   
   return (
     <AuthContext.Provider value={authContext}>
@@ -132,55 +166,39 @@ export default function App() {
           ) : !user ? (
             <>
               <Stack.Screen
-                name="Login"
+                name="LoginScreen"
                 component={LoginScreen}
-                options={{
-                  animationTypeForReplace: isSignout ? "pop" : "push",
-                  headerShown: false,
-                }}
+                options={basicScreenOptions}
               />
               <Stack.Screen
-                name="Register"
+                name="RegisterScreen"
                 component={RegisterScreen}
-                options={{
-                  animationTypeForReplace: isSignout ? "pop" : "push",
-                  title: "",
-                  headerShown: true,
-                  headerTintColor: theme.colors.text,
-                  headerStyle: {
-                    backgroundColor: theme.colors.background,
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                  }
-                }}
+                options={regularScreenOptions}
               />
               <Stack.Screen
                 name="ConfirmCodeScreen"
                 component={ConfirmCodeScreen}
-                options={{
-                  animationTypeForReplace: isSignout ? "pop" : "push",
-                  title: "",
-                  headerShown: true,
-                  headerTintColor: theme.colors.text,
-                  headerStyle: {
-                    backgroundColor: theme.colors.background,
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                  }
-                }}
+                options={regularScreenOptions}
               />
             </>
           ) : (
+            <>
             <Stack.Screen
-              name="Home"
+              name="HomeScreen"
               component={HomeScreen}
-              options={{
-                animationTypeForReplace: isSignout ? "pop" : "push",
-                headerShown: false,
-              }}
+              options={basicScreenOptions}
             />
+            <Stack.Screen
+              name="UserScreen"
+              component={UserScreen}
+              options={regularScreenOptions}
+            />
+            <Stack.Screen
+              name="NewTaskScreen"
+              component={NewTaskScreen}
+              options={regularScreenOptions}
+            />
+            </>
           )}
         </Stack.Navigator>
       </NavigationContainer>

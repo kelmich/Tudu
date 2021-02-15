@@ -16,8 +16,8 @@ const awsmobile = {
             "profile",
             "aws.cognito.signin.user.admin"
         ],
-        "redirectSignIn": "https://tudu.michaelkeller.dev/,https://tudu.kellermichael.com/,http://localhost:19006/",
-        "redirectSignOut": "https://tudu.michaelkeller.dev/,https://tudu.kellermichael.com/,http://localhost:19006/",
+        "redirectSignIn": "https://tudu.michaelkeller.dev/,https://tudu.kellermichael.com/,http://localhost:19006/,exp://192.168.2.11:19000/",
+        "redirectSignOut": "https://tudu.michaelkeller.dev/,https://tudu.kellermichael.com/,http://localhost:19006/,exp://192.168.2.11:19000/",
         "responseType": "code"
     },
     "federationTarget": "COGNITO_USER_POOLS"
