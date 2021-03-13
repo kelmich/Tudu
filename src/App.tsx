@@ -2,6 +2,11 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Splash from './pages/Splash';
+
+// Firebase Stuff
+import firebase from "firebase";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,19 +27,33 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+// Init Firebase
+let firebaseConfig = {
+  apiKey: "AIzaSyBoD4uwSxdlQ0MVh_zyDnh80ZAUTIg645I",
+  authDomain: "tudu-304519.firebaseapp.com",
+  projectId: "tudu-304519",
+  storageBucket: "tudu-304519.appspot.com",
+  messagingSenderId: "136828775674",
+  appId: "1:136828775674:web:9a4b585afa3800c218ed43"
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+
+const App: React.FC = function () {
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/" component={Splash} />
+          {/* <Route exact path="/" render={() => <Redirect to={"/splash"} />} /> */}
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp >
+  );
+}
 
 export default App;
