@@ -1,0 +1,14 @@
+.Column {
+  border-color: #ffffff;
+  border-width: 3px;
+  min-height: 100px;
+  width: 14.1%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Tasklist {
+  flex-grow: 1;
+  border-radius: 5px;
+  margin-bottom: 75px;
+}
