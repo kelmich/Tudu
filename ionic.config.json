@@ -1,7 +1,0 @@
-{
-  "name": "Tudu",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}
