@@ -1,3 +1,13 @@
+var d = new Date();
+var weekday = new Array(7);
+weekday[0] = "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
 const initialData = {
   tasks: {
     "task-1": { id: "task-1", content: "Analysis Serie 1" },
@@ -6,50 +16,44 @@ const initialData = {
     "task-4": { id: "task-4", content: "Analysis Serie 4" },
   },
   columns: {
-    Monday: {
-      id: "Monday",
-      title: "Monday",
+    [weekday[d.getDay()]]: {
+      id: weekday[d.getDay()],
+      title: weekday[d.getDay()],
       taskIds: ["task-1", "task-2", "task-3", "task-4"],
     },
-    Tuesday: {
-      id: "Tuesday",
-      title: "Tuesday",
+    [weekday[(d.getDay() + 1) % 7]]: {
+      id: weekday[(d.getDay() + 1) % 7],
+      title: weekday[(d.getDay() + 1) % 7],
       taskIds: [],
     },
-    Wednesday: {
-      id: "Wednesday",
-      title: "Wednesday",
+    [weekday[(d.getDay() + 2) % 7]]: {
+      id: weekday[(d.getDay() + 2) % 7],
+      title: weekday[(d.getDay() + 2) % 7],
       taskIds: [],
     },
-    Thursday: {
-      id: "Thursday",
-      title: "Thursday",
+    [weekday[(d.getDay() + 3) % 7]]: {
+      id: weekday[(d.getDay() + 3) % 7],
+      title: weekday[(d.getDay() + 3) % 7],
       taskIds: [],
     },
-    Friday: {
-      id: "Friday",
-      title: "Friday",
+    [weekday[(d.getDay() + 4) % 7]]: {
+      id: weekday[(d.getDay() + 4) % 7],
+      title: weekday[(d.getDay() + 4) % 7],
       taskIds: [],
     },
-    Saturday: {
-      id: "Saturday",
-      title: "Saturday",
-      taskIds: [],
-    },
-    Sunday: {
-      id: "Sunday",
-      title: "Sunday",
+    Anytime: {
+      id: "Anytime",
+      title: "Anytime",
       taskIds: [],
     },
   },
   columnOrder: [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    weekday[d.getDay()],
+    weekday[(d.getDay() + 1) % 7],
+    weekday[(d.getDay() + 2) % 7],
+    weekday[(d.getDay() + 3) % 7],
+    weekday[(d.getDay() + 4) % 7],
+    "Anytime",
   ],
 };
 
