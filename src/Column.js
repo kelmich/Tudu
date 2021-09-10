@@ -5,17 +5,9 @@ import { Droppable } from "react-beautiful-dnd";
 
 function Column(props) {
   return (
-    <div
-      className={
-        "Column" + (props.column.id === "Anytime" ? " Bottom" : " Top")
-      }
-      style={{ textAlign: props.column.id === "Anytime" ? "left" : "center" }}
-    >
+    <div className="Column">
       <h2>{props.column.title}</h2>
-      <Droppable
-        droppableId={props.column.id}
-        direction={props.column.id === "Anytime" ? "horizontal" : "vertical"}
-      >
+      <Droppable droppableId={props.column.id}>
         {
           // note: necessary because droppable expects a function & for styling later
           (provided, snapshot) => (
@@ -28,7 +20,6 @@ function Column(props) {
                   !props.column.taskIds.includes(snapshot.draggingOverWith)
                     ? "#2d5ec2"
                     : "transparent",
-                flexDirection: props.column.id === "Anytime" ? "row" : "column",
               }}
               className="Tasklist"
             >

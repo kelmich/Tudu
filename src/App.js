@@ -59,32 +59,17 @@ function App() {
   let [state, setState] = useState(initialData);
   return (
     <div className="App">
-      <div className="DragDrop">
+      <header className="App-header">
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, state, setState)}
         >
-          <div className="DragDrop-Top">
-            {state.columnOrder.map((columnId) => {
-              const column = state.columns[columnId];
-              const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
-              if (columnId !== "Anytime") {
-                return <Column key={column.id} column={column} tasks={tasks} />;
-              } else {
-                return null;
-              }
-            })}
-          </div>
-          <div className="DragDrop-Bottom">
-            <Column
-              key={"Anytime"}
-              column={state.columns["Anytime"]}
-              tasks={state.columns["Anytime"].taskIds.map(
-                (taskId) => state.tasks[taskId]
-              )}
-            />
-          </div>
+          {state.columnOrder.map((columnId) => {
+            const column = state.columns[columnId];
+            const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
+            return <Column key={column.id} column={column} tasks={tasks} />;
+          })}
         </DragDropContext>
-      </div>
+      </header>
     </div>
   );
 }

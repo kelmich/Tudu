@@ -1,24 +1,25 @@
 .App {
-  background-color: #282c34;
   text-align: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.DragDrop {
-  display: flex;
-  flex-direction: column;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
   min-height: 100vh;
-}
-
-.DragDrop-Top {
   display: flex;
   flex-direction: row;
   align-items: top;
   justify-content: space-evenly;
-  min-height: 70vh;
-}
-
-.DragDrop-Bottom {
-  min-height: 30vh;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
