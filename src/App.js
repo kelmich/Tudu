@@ -59,25 +59,42 @@ function App() {
   let [state, setState] = useState(initialData);
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="DragDrop">
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, state, setState)}
         >
-          {state.columnOrder.map((columnId) => {
-            const column = state.columns[columnId];
-            const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
-            return (
-              <Column
-                key={column.id}
-                column={column}
-                tasks={tasks}
-                state={state}
-                setState={setState}
-              />
-            );
-          })}
+          <div className="DragDrop-Top">
+            {state.columnOrder.map((columnId) => {
+              const column = state.columns[columnId];
+              const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
+              if (columnId !== "Anytime") {
+                return (
+                  <Column
+                    key={column.id}
+                    column={column}
+                    tasks={tasks}
+                    state={state}
+                    setState={setState}
+                  />
+                );
+              } else {
+                return null;
+              }
+            })}
+          </div>
+          <div className="DragDrop-Bottom">
+            <Column
+              key={"Anytime"}
+              column={state.columns["Anytime"]}
+              tasks={state.columns["Anytime"].taskIds.map(
+                (taskId) => state.tasks[taskId]
+              )}
+              state={state}
+              setState={setState}
+            />
+          </div>
         </DragDropContext>
-      </header>
+      </div>
     </div>
   );
 }

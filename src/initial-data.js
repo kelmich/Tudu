@@ -1,13 +1,3 @@
-var d = new Date();
-var weekday = new Array(7);
-weekday[0] = "Sunday";
-weekday[1] = "Monday";
-weekday[2] = "Tuesday";
-weekday[3] = "Wednesday";
-weekday[4] = "Thursday";
-weekday[5] = "Friday";
-weekday[6] = "Saturday";
-
 const initialData = {
   tasks: {
     "task-1": {
@@ -36,29 +26,39 @@ const initialData = {
     },
   },
   columns: {
-    [weekday[d.getDay()]]: {
-      id: weekday[d.getDay()],
-      title: weekday[d.getDay()],
+    Monday: {
+      id: "Monday",
+      title: "Monday",
       taskIds: ["task-1", "task-2", "task-3", "task-4"],
     },
-    [weekday[(d.getDay() + 1) % 7]]: {
-      id: weekday[(d.getDay() + 1) % 7],
-      title: weekday[(d.getDay() + 1) % 7],
+    Tuesday: {
+      id: "Tuesday",
+      title: "Tuesday",
       taskIds: [],
     },
-    [weekday[(d.getDay() + 2) % 7]]: {
-      id: weekday[(d.getDay() + 2) % 7],
-      title: weekday[(d.getDay() + 2) % 7],
+    Wednesday: {
+      id: "Wednesday",
+      title: "Wednesday",
       taskIds: [],
     },
-    [weekday[(d.getDay() + 3) % 7]]: {
-      id: weekday[(d.getDay() + 3) % 7],
-      title: weekday[(d.getDay() + 3) % 7],
+    Thursday: {
+      id: "Thursday",
+      title: "Thursday",
       taskIds: [],
     },
-    [weekday[(d.getDay() + 4) % 7]]: {
-      id: weekday[(d.getDay() + 4) % 7],
-      title: weekday[(d.getDay() + 4) % 7],
+    Friday: {
+      id: "Friday",
+      title: "Friday",
+      taskIds: [],
+    },
+    Saturday: {
+      id: "Saturday",
+      title: "Saturday",
+      taskIds: [],
+    },
+    Sunday: {
+      id: "Sunday",
+      title: "Sunday",
       taskIds: [],
     },
     Anytime: {
@@ -68,11 +68,13 @@ const initialData = {
     },
   },
   columnOrder: [
-    weekday[d.getDay()],
-    weekday[(d.getDay() + 1) % 7],
-    weekday[(d.getDay() + 2) % 7],
-    weekday[(d.getDay() + 3) % 7],
-    weekday[(d.getDay() + 4) % 7],
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
     "Anytime",
   ],
 };

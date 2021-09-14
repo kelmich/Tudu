@@ -1,15 +1,11 @@
 .Card {
   text-align: left;
   height: 8vh;
+  min-width: calc(14% - 3vh);
   border-radius: 5px;
   padding: 1vh;
   margin-top: 1vh;
-  margin-left: 1vh;
   margin-right: 1vh;
-}
-
-.Wrapper {
-  padding: 1vh;
 }
 
 .Title {

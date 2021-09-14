@@ -1,20 +1,20 @@
 .Column {
   min-height: 100px;
-  width: 14.1%;
   display: flex;
   flex-direction: column;
 }
 
 .Tasklist {
-  flex-grow: 1;
+  display: flex;
+  flex: 1;
   border-radius: 5px;
-  margin-bottom: 75px;
 }
 
-.Date {
-  background-color: #82a6b1;
+.Top {
+  width: 14%;
 }
 
-.Anytime {
-  background-color: #d7ffab;
+.Bottom {
+  margin-left: 5vh;
+  height: 25vh;
 }
