@@ -10,10 +10,10 @@ weekday[6] = "Saturday";
 
 const initialData = {
   tasks: {
-    "task-1": { id: "task-1", content: "Analysis Serie 1" },
-    "task-2": { id: "task-2", content: "Analysis Serie 2" },
-    "task-3": { id: "task-3", content: "Analysis Serie 3" },
-    "task-4": { id: "task-4", content: "Analysis Serie 4" },
+    "task-1": { id: "task-1", title: "Analysis", content: "Serie 1" },
+    "task-2": { id: "task-2", title: "Analysis", content: "Serie 2" },
+    "task-3": { id: "task-3", title: "Analysis", content: "Serie 3" },
+    "task-4": { id: "task-4", title: "Analysis", content: "Serie 4" },
   },
   columns: {
     [weekday[d.getDay()]]: {

@@ -18,10 +18,13 @@ function Column(props) {
                 backgroundColor:
                   snapshot.isDraggingOver &&
                   !props.column.taskIds.includes(snapshot.draggingOverWith)
-                    ? "#2d5ec2"
-                    : "transparent",
+                    ? "#ffffff"
+                    : null,
               }}
-              className="Tasklist"
+              className={
+                "Tasklist" +
+                (props.column.id === "Anytime" ? " Anytime" : " Date")
+              }
             >
               {props.tasks.map((task, index) => (
                 <Task key={task.id} task={task} index={index} />

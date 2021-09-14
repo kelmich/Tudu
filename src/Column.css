@@ -1,6 +1,4 @@
 .Column {
-  border-color: #ffffff;
-  border-width: 3px;
   min-height: 100px;
   width: 14.1%;
   display: flex;
@@ -11,4 +9,12 @@
   flex-grow: 1;
   border-radius: 5px;
   margin-bottom: 75px;
+}
+
+.Date {
+  background-color: #82a6b1;
+}
+
+.Anytime {
+  background-color: #d7ffab;
 }
