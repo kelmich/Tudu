@@ -27,7 +27,13 @@ function Column(props) {
               }
             >
               {props.tasks.map((task, index) => (
-                <Task key={task.id} task={task} index={index} />
+                <Task
+                  key={task.id}
+                  task={task}
+                  index={index}
+                  state={props.state}
+                  setState={props.setState}
+                />
               ))}
               {provided.placeholder}
             </div>
