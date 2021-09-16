@@ -1,9 +1,9 @@
 import { useState } from "react";
-
 import "./App.css";
 import initialData from "./initial-data";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
+import Swal from "sweetalert2";
 
 function onDragEnd(result, state, setState) {
   const { destination, source, draggableId } = result;
@@ -55,10 +55,53 @@ function onDragEnd(result, state, setState) {
   setState(newState);
 }
 
+async function openLogin() {
+  const { value: username } = await Swal.fire({
+    title: "Enter your username",
+    input: "text",
+    inputValue: "",
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value) {
+        return "You need to write something!";
+      }
+    },
+  });
+
+  if (username) {
+    const { value: password } = await Swal.fire({
+      title: "Enter your password",
+      input: "password",
+      inputLabel: "Password",
+      inputPlaceholder: "Enter your password",
+      inputAttributes: {
+        maxlength: 10,
+        autocapitalize: "off",
+        autocorrect: "off",
+      },
+    });
+
+    if (password) {
+      Swal.fire(`Entered password: ${password} and username ${username}`);
+    }
+  }
+}
+
 function App() {
   let [state, setState] = useState(initialData);
   return (
     <div className="App">
+      <div className="Header">
+        <div className="Third" />
+        <div className="Third">
+          <div className="Tudu">Tudu</div>
+        </div>
+        <div className="Third">
+          <div className="Login" onClick={openLogin}>
+            Login
+          </div>
+        </div>
+      </div>
       <div className="DragDrop">
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, state, setState)}
