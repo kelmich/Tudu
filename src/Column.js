@@ -5,31 +5,35 @@ import { Droppable } from "react-beautiful-dnd";
 
 function Column(props) {
   return (
-    <div
-      className={
-        "Column" + (props.column.id === "Anytime" ? " Bottom" : " Top")
-      }
-      style={{ textAlign: props.column.id === "Anytime" ? "left" : "center" }}
+    <Droppable
+      droppableId={props.column.id}
+      direction={props.column.id === "Anytime" ? "horizontal" : "vertical"}
     >
-      <h2>{props.column.title}</h2>
-      <Droppable
-        droppableId={props.column.id}
-        direction={props.column.id === "Anytime" ? "horizontal" : "vertical"}
-      >
-        {
-          // note: necessary because droppable expects a function & for styling later
-          (provided, snapshot) => (
+      {
+        // note: necessary because droppable expects a function & for styling later
+        (provided, snapshot) => (
+          <div
+            className={
+              "Column " + (props.column.id === "Anytime" ? "Bottom" : "Top")
+            }
+            style={{
+              borderColor:
+                snapshot.isDraggingOver &&
+                !props.column.taskIds.includes(snapshot.draggingOverWith)
+                  ? "#ffffff"
+                  : "transparent",
+            }}
+          >
+            <h2>{props.column.title}</h2>
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
               style={{
-                backgroundColor:
-                  snapshot.isDraggingOver &&
-                  !props.column.taskIds.includes(snapshot.draggingOverWith)
-                    ? "#ffffff"
-                    : "transparent",
                 flexDirection: props.column.id === "Anytime" ? "row" : "column",
-                paddingLeft: props.column.id === "Anytime" ? 0 : "1vh",
+                paddingLeft:
+                  props.column.id !== "Anytime"
+                    ? "calc(((100vw / 8) - (100vw / 10) - 2vh) / 2)"
+                    : 0,
               }}
               className="Tasklist"
             >
@@ -44,10 +48,10 @@ function Column(props) {
               ))}
               {provided.placeholder}
             </div>
-          )
-        }
-      </Droppable>
-    </div>
+          </div>
+        )
+      }
+    </Droppable>
   );
 }
 

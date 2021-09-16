@@ -1,22 +1,21 @@
 .App {
   background-color: #282c34;
-  text-align: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1vmin);
   color: white;
 }
 
 .DragDrop {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 96vh;
+  padding: 2vh;
 }
 
 .DragDrop-Top {
   display: flex;
   flex-direction: row;
-  align-items: top;
   justify-content: space-evenly;
-  min-height: 70vh;
+  min-height: 66vh;
 }
 
 .DragDrop-Bottom {

@@ -1,20 +1,23 @@
 .Column {
-  min-height: 100px;
   display: flex;
   flex-direction: column;
+  border-radius: 20px;
+  border-width: "2px";
+  border-style: dashed;
+  border-color: transparent;
+  text-align: center;
 }
 
 .Tasklist {
   display: flex;
   flex: 1;
-  border-radius: 5px;
 }
 
 .Top {
-  width: 14%;
+  width: 12.5vw;
 }
 
 .Bottom {
-  margin-left: 5vh;
+  padding: 1vh;
   height: 25vh;
 }
