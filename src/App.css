@@ -42,8 +42,7 @@
   flex-direction: column;
   min-height: 90vh;
   padding: 2vh;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 20px;
+  border-radius: 30px;
   border-width: 1px;
   border-color: transparent;
   background-color: #282c34;

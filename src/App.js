@@ -4,6 +4,7 @@ import initialData from "./initial-data";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
 import Swal from "sweetalert2";
+import login from "./helpers";
 
 function onDragEnd(result, state, setState) {
   const { destination, source, draggableId } = result;
@@ -56,35 +57,30 @@ function onDragEnd(result, state, setState) {
 }
 
 async function openLogin() {
-  const { value: username } = await Swal.fire({
-    title: "Enter your username",
-    input: "text",
-    inputValue: "",
-    showCancelButton: true,
-    inputValidator: (value) => {
-      if (!value) {
-        return "You need to write something!";
-      }
+  Swal.fire({
+    title: "Please Login",
+    html:
+      '<input id="swal-input1" type="text" placeholder="Username" class="swal2-input">' +
+      '<input id="swal-input2" type="password" placeholder="Password" class="swal2-input" style="margin-bottom: 5px">',
+    focusConfirm: false,
+    footer:
+      '<a href="https://www.kellermichael.com/tudu">A Note On Privacy</a>',
+    confirmButtonText: "Login",
+    preConfirm: () => {
+      return login(
+        document.getElementById("swal-input1").value,
+        document.getElementById("swal-input2").value
+      );
     },
-  });
-
-  if (username) {
-    const { value: password } = await Swal.fire({
-      title: "Enter your password",
-      input: "password",
-      inputLabel: "Password",
-      inputPlaceholder: "Enter your password",
-      inputAttributes: {
-        maxlength: 10,
-        autocapitalize: "off",
-        autocorrect: "off",
-      },
+    showLoaderOnConfirm: true,
+  }).then((result) => {
+    Swal.fire({
+      icon: "success",
+      title: "Logged In!",
+      timer: 1000,
+      showConfirmButton: false,
     });
-
-    if (password) {
-      Swal.fire(`Entered password: ${password} and username ${username}`);
-    }
-  }
+  });
 }
 
 function App() {
