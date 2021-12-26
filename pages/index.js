@@ -48,7 +48,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className={styles.footer}>It's even nextjs!</footer>
+      <footer className={styles.footer}>It's even nextjs, Lukas!</footer>
     </div>
   );
 }
