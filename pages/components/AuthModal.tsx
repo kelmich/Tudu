@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "@mantine/hooks";
-import { FiUser, FiLock } from "react-icons/fi";
+import { FiUser, FiLock, FiCheckCircle } from "react-icons/fi";
 import {
   Modal,
   Button,
@@ -11,7 +11,9 @@ import {
   Text,
   LoadingOverlay,
   Anchor,
+  useMantineTheme,
 } from "@mantine/core";
+import { useNotifications } from "@mantine/notifications";
 import * as openpgp from "openpgp";
 
 function AuthModal() {
@@ -24,6 +26,9 @@ function AuthModal() {
     setFormType((current) => (current === "register" ? "login" : "register"));
     setError(null);
   };
+
+  const notifications = useNotifications();
+  const theme = useMantineTheme();
 
   const form = useForm({
     initialValues: {
@@ -69,6 +74,16 @@ function AuthModal() {
       });
       if (req.status != 200) {
         setError((await req.json()).error);
+      } else {
+        setLoading(false);
+        setOpened(false);
+        notifications.showNotification({
+          title: "Registration Successful",
+          message: "Hey there, welcome to Tudu!",
+          autoClose: 2000,
+          color: theme.colors.teal[5],
+          icon: <FiCheckCircle />,
+        });
       }
     }
     setLoading(false);
