@@ -14,6 +14,7 @@ const db = new Firestore({
     auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_CERT_URL,
     client_x509_cert_url: process.env.CLIENT_CERT_URL,
   },
+  // keyFilename: "tudu-service-account.json",
 });
 
 export default db;

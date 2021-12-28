@@ -10,6 +10,6 @@ export default async function hello(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(200).end();
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    res.status(500).json({ error: "Username already exists" });
   }
 }

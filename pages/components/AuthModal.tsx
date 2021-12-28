@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "@mantine/hooks";
-import { FiUser, FiLock, FiCheckCircle } from "react-icons/fi";
+import { FiUser, FiLock, FiCheck } from "react-icons/fi";
 import {
   Modal,
   Button,
@@ -50,7 +50,40 @@ function AuthModal() {
     setLoading(true);
     setError(null);
     if (formType === "login") {
-      setError("Not supported yet");
+      let req = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+          username: form.values.username,
+        }),
+      });
+      let res = await req.json();
+      if (req.status != 200) {
+        setError(res.error);
+      } else {
+        console.log(res);
+        try {
+          const privateKey = await openpgp.decryptKey({
+            privateKey: await openpgp.readPrivateKey({
+              armoredKey: res.encPrivKey,
+            }),
+            passphrase: form.values.password,
+          });
+          setLoading(false);
+          setOpened(false);
+          notifications.showNotification({
+            title: "Login Successful",
+            message: "Nice to see you again!",
+            autoClose: 3000,
+            color: "green", // theme.colors.green[5],
+            icon: <FiCheck />,
+          });
+        } catch (error) {
+          setError("Incorrect Password");
+        }
+      }
     } else {
       const { privateKey, publicKey, revocationCertificate } =
         await openpgp.generateKey({
@@ -80,9 +113,9 @@ function AuthModal() {
         notifications.showNotification({
           title: "Registration Successful",
           message: "Hey there, welcome to Tudu!",
-          autoClose: 2000,
-          color: theme.colors.teal[5],
-          icon: <FiCheckCircle />,
+          autoClose: 3000,
+          color: "green", // theme.colors.green[5],
+          icon: <FiCheck />,
         });
       }
     }
