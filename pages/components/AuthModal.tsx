@@ -56,7 +56,7 @@ function AuthModal() {
           format: "armored", // output key format, defaults to 'armored' (other options: 'binary' or 'object')
         });
 
-      await fetch("/api/register", {
+      let req = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
@@ -67,6 +67,9 @@ function AuthModal() {
           encPrivKey: privateKey,
         }),
       });
+      if (req.status != 200) {
+        setError((await req.json()).error);
+      }
     }
     setLoading(false);
   };
