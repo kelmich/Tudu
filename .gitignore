@@ -17,8 +17,8 @@
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local
 .env.production
+.env.production.local
 tudu-service-account.json
 
 npm-debug.log*
