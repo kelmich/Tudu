@@ -11,7 +11,6 @@ import {
   Text,
   LoadingOverlay,
   Anchor,
-  useMantineTheme,
 } from "@mantine/core";
 import * as openpgp from "openpgp";
 

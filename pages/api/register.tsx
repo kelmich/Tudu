@@ -4,6 +4,9 @@ import db from "./db";
 export default async function hello(req: NextApiRequest, res: NextApiResponse) {
   const docRef = db.collection("Users").doc(req.body.username);
 
+  console.log(process.env.PROJECT_ID);
+
+  // use create?
   await docRef.set({
     pubKey: req.body.pubKey,
     encPrivKey: req.body.encPrivKey,
