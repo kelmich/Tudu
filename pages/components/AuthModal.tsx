@@ -16,7 +16,7 @@ import {
 import { useNotifications } from "@mantine/notifications";
 import * as openpgp from "openpgp";
 
-function AuthModal() {
+function AuthModal(props: { setPrivKey: (arg0: openpgp.PrivateKey) => void }) {
   const [opened, setOpened] = useState(false);
   const [formType, setFormType] = useState<"register" | "login">("register");
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,6 @@ function AuthModal() {
       if (req.status != 200) {
         setError(res.error);
       } else {
-        console.log(res);
         try {
           const privateKey = await openpgp.decryptKey({
             privateKey: await openpgp.readPrivateKey({
@@ -71,6 +70,7 @@ function AuthModal() {
             }),
             passphrase: form.values.password,
           });
+          props.setPrivKey(privateKey);
           setLoading(false);
           setOpened(false);
           notifications.showNotification({
