@@ -1,12 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "./db";
+import { EncUser } from "../types";
 
-export default async function hello(req: NextApiRequest, res: NextApiResponse) {
+export default async function register(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
-    const docRef = db.collection("Users").doc(req.body.username);
+    let newUser: EncUser = req.body;
+    const docRef = db.collection("Users").doc(newUser.username);
     await docRef.create({
-      pubKey: req.body.pubKey,
-      encPrivKey: req.body.encPrivKey,
+      pubKey: newUser.pubKey,
+      encPrivKey: newUser.encPrivKey,
     });
     res.status(200).end();
   } catch (error) {

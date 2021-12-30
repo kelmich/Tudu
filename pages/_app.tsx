@@ -10,11 +10,11 @@ import { NotificationsProvider } from "@mantine/notifications";
 import AuthModal from "./components/AuthModal";
 import DDZone from "./DDZone";
 import "../public/reset.css";
-import { PrivateKey } from "openpgp";
+import { User } from "./types";
 
 function App() {
   const [colorScheme, setColorScheme] = React.useState<ColorScheme>("dark");
-  const [privKey, setPrivKey] = useState<PrivateKey>(null);
+  const [user, setUser] = useState<User>(null);
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
@@ -44,11 +44,7 @@ function App() {
               flexDirection: "column",
             }}
           >
-            {privKey ? (
-              <DDZone privKey={privKey} />
-            ) : (
-              <AuthModal setPrivKey={setPrivKey} />
-            )}
+            {user ? <DDZone user={user} /> : <AuthModal setUser={setUser} />}
           </main>
         </NotificationsProvider>
       </MantineProvider>

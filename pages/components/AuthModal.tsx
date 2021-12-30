@@ -15,8 +15,9 @@ import {
 } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import * as openpgp from "openpgp";
+import { User } from "../types";
 
-function AuthModal(props: { setPrivKey: (arg0: openpgp.PrivateKey) => void }) {
+function AuthModal(props: { setUser: (arg0: User) => void }) {
   const [opened, setOpened] = useState(false);
   const [formType, setFormType] = useState<"register" | "login">("register");
   const [loading, setLoading] = useState(false);
@@ -64,13 +65,18 @@ function AuthModal(props: { setPrivKey: (arg0: openpgp.PrivateKey) => void }) {
         setError(res.error);
       } else {
         try {
+          const publicKey = await openpgp.readKey({ armoredKey: res.pubKey });
           const privateKey = await openpgp.decryptKey({
             privateKey: await openpgp.readPrivateKey({
               armoredKey: res.encPrivKey,
             }),
             passphrase: form.values.password,
           });
-          props.setPrivKey(privateKey);
+          props.setUser({
+            username: form.values.username,
+            pubKey: publicKey,
+            privKey: privateKey,
+          });
           setLoading(false);
           setOpened(false);
           notifications.showNotification({
