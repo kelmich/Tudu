@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "./db";
 import verifyRequest from "./verifyRequest";
 import { readCleartextMessage } from "openpgp";
-import { SignedRequest, Task } from "../types";
+import { SignedRequest } from "../../helpers/types";
 
 export default async function addTask(
   req: NextApiRequest,

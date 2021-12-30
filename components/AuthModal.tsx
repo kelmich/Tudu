@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import * as openpgp from "openpgp";
-import { User } from "../types";
+import { User } from "../helpers/types";
 
 function AuthModal(props: { setUser: (arg0: User) => void }) {
   const [opened, setOpened] = useState(false);

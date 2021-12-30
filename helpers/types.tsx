@@ -1,10 +1,17 @@
 import { PublicKey, PrivateKey } from "openpgp";
 
 export interface Task {
-  id: string;
+  id?: string;
   title: string;
   description?: string;
   date?: Date;
+}
+
+export interface EncTask {
+  username: string;
+  year: number;
+  month: number;
+  task: string;
 }
 
 export interface User {
@@ -23,4 +30,9 @@ export interface SignedRequest {
   username: string;
   data: Object;
   signature: string;
+}
+
+export interface MonthTasksQuery {
+  year: number;
+  month: number;
 }

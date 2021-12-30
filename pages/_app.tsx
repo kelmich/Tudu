@@ -7,10 +7,10 @@ import {
   ColorScheme,
 } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import AuthModal from "./components/AuthModal";
+import AuthModal from "../components/AuthModal";
 import DDZone from "./DDZone";
 import "../public/reset.css";
-import { User } from "./types";
+import { User } from "../helpers/types";
 
 function App() {
   const [colorScheme, setColorScheme] = React.useState<ColorScheme>("dark");

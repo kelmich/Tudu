@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "./db";
-import { EncUser } from "../types";
+import { EncUser } from "../../helpers/types";
 
 export default async function register(
   req: NextApiRequest,

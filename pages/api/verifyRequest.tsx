@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "./db";
-import { EncUser, SignedRequest } from "../types";
-import { verifyJSON } from "../helpers/encription";
+import { EncUser, SignedRequest } from "../../helpers/types";
+import { verifyJSON } from "../../helpers/encription";
 import { readKey, readCleartextMessage } from "openpgp";
 
 export default async function verifyRequest(
