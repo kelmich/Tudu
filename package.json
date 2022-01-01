@@ -8,8 +8,10 @@
   "dependencies": {
     "@google-cloud/firestore": "^5.0.1",
     "@mantine/core": "^3.4.3",
+    "@mantine/dates": "^3.4.3",
     "@mantine/hooks": "^3.4.3",
     "@mantine/notifications": "^3.4.3",
+    "dayjs": "^1.10.7",
     "next": "latest",
     "openpgp": "^5.0.1",
     "react": "^17.0.2",

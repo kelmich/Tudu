@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, useMantineTheme } from "@mantine/core";
 import { User, Task, EncTask, MonthTasksQuery } from "../helpers/types";
 import { encryptJSON, decryptJSON, signJSON } from "../helpers/encription";
+import ModifyTaskModal from "../components/ModifyTaskModal";
 
 async function addTask(user: User, task: Task) {
   let newTaskEnc = {
@@ -10,12 +11,16 @@ async function addTask(user: User, task: Task) {
     month: task.date.getMonth(),
     task: await encryptJSON(task, user.pubKey),
   };
-  let req = await fetch("/api/addTask", {
+  let newTaskEncSigned = {
+    ...newTaskEnc,
+    signature: await signJSON(newTaskEnc, user.privKey),
+  };
+  await fetch("/api/addTask", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    body: JSON.stringify(await signJSON(newTaskEnc, user.privKey)),
+    body: JSON.stringify(newTaskEncSigned),
   });
 }
 
@@ -47,17 +52,7 @@ function DDZone(props: { user: User }) {
 
   return (
     <div>
-      <Button
-        onClick={async () =>
-          await addTask(props.user, {
-            title: "Hello Task",
-            description: "Description",
-            date: new Date(),
-          })
-        }
-      >
-        Add a basic Task
-      </Button>
+      <ModifyTaskModal user={props.user} />
       <Button
         onClick={async () =>
           await getTasks(props.user, {

@@ -17,8 +17,8 @@ export default async function verifyRequest(
       await db.collection("Users").doc(request.username).get()
     ).data();
     const publicKey = await readKey({ armoredKey: user.pubKey });
-    if (await verifyJSON(req.body, publicKey)) {
-      return true;
+    if (await verifyJSON(message, publicKey)) {
+      return request;
     } else {
       res.status(403).json({ error: "Request not properly signed" });
     }
