@@ -4,26 +4,6 @@ import { User, Task, EncTask, MonthTasksQuery } from "../helpers/types";
 import { encryptJSON, decryptJSON, signJSON } from "../helpers/encription";
 import ModifyTaskModal from "../components/ModifyTaskModal";
 
-async function addTask(user: User, task: Task) {
-  let newTaskEnc = {
-    username: user.username,
-    year: task.date.getFullYear(),
-    month: task.date.getMonth(),
-    task: await encryptJSON(task, user.pubKey),
-  };
-  let newTaskEncSigned = {
-    ...newTaskEnc,
-    signature: await signJSON(newTaskEnc, user.privKey),
-  };
-  await fetch("/api/addTask", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify(newTaskEncSigned),
-  });
-}
-
 async function getTasks(user: User, query: MonthTasksQuery) {
   let q = {
     username: user.username,

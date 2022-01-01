@@ -130,7 +130,14 @@ function AuthModal(props: { setUser: (arg0: User) => void }) {
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)}>
+      <Modal
+        opened={opened}
+        onClose={() => {
+          setOpened(false);
+          setError(null);
+          form.reset();
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Title style={{ fontFamily: "Pacifico", height: 60 }}>Tudu</Title>
         </div>

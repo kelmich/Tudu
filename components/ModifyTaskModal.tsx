@@ -4,16 +4,15 @@ import {
   Modal,
   Button,
   Group,
-  Title,
   TextInput,
   Text,
   LoadingOverlay,
-  Anchor,
   useMantineTheme,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useNotifications } from "@mantine/notifications";
 import { User } from "../helpers/types";
+import { encryptJSON, signJSON } from "../helpers/encription";
 
 function ModifyTaskModal(props: { user: User }) {
   const [opened, setOpened] = useState(false);
@@ -38,21 +37,49 @@ function ModifyTaskModal(props: { user: User }) {
   });
 
   const handleSubmit = async () => {
-    setError("Not Implemented");
+    let task = form.values;
+    let user = props.user;
+    if (formType == "create") {
+      let newTaskEnc = {
+        username: user.username,
+        year: task.date.getFullYear(),
+        month: task.date.getMonth(),
+        task: await encryptJSON(task, user.pubKey),
+      };
+      let newTaskEncSigned = await signJSON(newTaskEnc, user.privKey);
+      await fetch("/api/addTask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(newTaskEncSigned),
+      });
+    }
   };
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)}>
+      <Modal
+        opened={opened}
+        onClose={() => {
+          setOpened(false);
+          setError(null);
+          form.reset();
+        }}
+        title={formType == "create" ? "Add Task" : "Update Task"}
+      >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <LoadingOverlay visible={loading} style={{ borderRadius: 5 }} />
+          <Group grow>
+            <TextInput
+              mt="md"
+              placeholder="Title"
+              label="Title"
+              {...form.getInputProps("title")}
+            />
 
-          <TextInput
-            mt="md"
-            placeholder="Title"
-            label="Title"
-            {...form.getInputProps("title")}
-          />
+            <DatePicker placeholder="Pick date" label="Event date" mt="md" />
+          </Group>
 
           <TextInput
             mt="md"
@@ -61,17 +88,16 @@ function ModifyTaskModal(props: { user: User }) {
             {...form.getInputProps("description")}
           />
 
-          <DatePicker placeholder="Pick date" label="Event date" required />
-
           {error && (
             <Text color="red" size="sm" mt="sm">
               {error}
             </Text>
           )}
-
-          <Button color="blue" type="submit">
-            {formType === "create" ? "Create" : "Update"}
-          </Button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button color="blue" type="submit" mt="xl">
+              {formType === "create" ? "Create" : "Update"}
+            </Button>
+          </div>
         </form>
       </Modal>
 
