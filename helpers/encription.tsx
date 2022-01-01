@@ -3,11 +3,9 @@ import {
   createMessage,
   readMessage,
   decrypt,
-  readCleartextMessage,
   createCleartextMessage,
   PublicKey,
   PrivateKey,
-  CleartextMessage,
   sign,
   verify,
 } from "openpgp";
@@ -47,10 +45,7 @@ export async function signJSON(json: Object, privKey: PrivateKey) {
   return cleartextMessage;
 }
 
-export async function verifyJSON(
-  signedMessage: CleartextMessage,
-  pubKey: PublicKey
-) {
+export async function verifyJSON(signedMessage, pubKey: PublicKey) {
   const verificationResult = await verify({
     message: signedMessage,
     verificationKeys: pubKey,
