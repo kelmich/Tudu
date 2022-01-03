@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "./db";
 import verifyRequest from "./verifyRequest";
-import { readCleartextMessage } from "openpgp";
 import { SignedRequest, MonthTasksQuery, Task } from "../../helpers/types";
 
 export default async function getTasks(

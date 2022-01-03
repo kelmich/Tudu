@@ -32,18 +32,19 @@ function ModifyTaskModal(props: { user: User }) {
     initialValues: {
       title: "",
       description: "",
-      date: new Date(),
+      date: null,
     },
   });
 
   const handleSubmit = async () => {
+    setLoading(true);
     let task = form.values;
     let user = props.user;
     if (formType == "create") {
       let newTaskEnc = {
         username: user.username,
-        year: task.date.getFullYear(),
-        month: task.date.getMonth(),
+        year: task.date != null ? task.date.getFullYear() : null,
+        month: task.date != null ? task.date.getMonth() : null,
         task: await encryptJSON(task, user.pubKey),
       };
       let newTaskEncSigned = await signJSON(newTaskEnc, user.privKey);
@@ -55,6 +56,10 @@ function ModifyTaskModal(props: { user: User }) {
         body: JSON.stringify(newTaskEncSigned),
       });
     }
+    setOpened(false);
+    setError(null);
+    form.reset();
+    setLoading(false);
   };
 
   return (
@@ -68,6 +73,7 @@ function ModifyTaskModal(props: { user: User }) {
         }}
         title={formType == "create" ? "Add Task" : "Update Task"}
       >
+        <LoadingOverlay visible={loading} style={{ borderRadius: 5 }} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <LoadingOverlay visible={loading} style={{ borderRadius: 5 }} />
           <Group grow>
@@ -78,7 +84,12 @@ function ModifyTaskModal(props: { user: User }) {
               {...form.getInputProps("title")}
             />
 
-            <DatePicker placeholder="Pick date" label="Event date" mt="md" />
+            <DatePicker
+              placeholder="Pick date"
+              label="Event date"
+              mt="md"
+              {...form.getInputProps("date")}
+            />
           </Group>
 
           <TextInput

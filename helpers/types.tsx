@@ -1,5 +1,10 @@
 import { PublicKey, PrivateKey } from "openpgp";
 
+export interface Col {
+  date: Date;
+  tasks: Task[];
+}
+
 export interface Task {
   id?: string;
   title: string;
@@ -8,6 +13,7 @@ export interface Task {
 }
 
 export interface EncTask {
+  id?: string;
   username: string;
   year: number;
   month: number;
